@@ -9,9 +9,9 @@ from skimage.transform import resize
 from skimage.data import imread
 from skimage import color
 
-training_file = 'dataset/train.p'
-validation_file = 'dataset/valid.p'
-testing_file = 'dataset/test.p'
+training_file = 'data/train.p'
+validation_file = 'data/valid.p'
+testing_file = 'data/test.p'
 
 is_debug = True
 
@@ -45,7 +45,6 @@ def subplot_show(img_list, label_list, gray=False):
             plt.imshow(img_list[i])
     plt.show()
 
-
 # # the original images
 # subplot_show(data.test_x[:4])
 
@@ -60,11 +59,35 @@ num_epoch = 20
 batch_size = 128
 save_dir = 'model_save_dir'
 num_step = int(np.round(data.n_train/batch_size))
-is_training = False
+is_training = True
 
 if not os.path.exists(save_dir):
     os.mkdir(save_dir)
 save_path = os.path.join(save_dir, 'convnet_model.ckpt')
+
+
+def outputFeatureMap(image_input, sess, tf_activation, activation_min=-1, activation_max=-1 ,plt_num=1):
+    # Here make sure to preprocess your image_input in a way your network expects
+    # with size, normalization, ect if needed
+    # image_input =
+    # Note: x should be the same name as your network's tensorflow data placeholder variable
+    # If you get an error tf_activation is not defined it may be having trouble accessing the variable from inside a function
+    image_input = np.reshape(image_input, [1, 32, 32])
+    activation = tf_activation.eval(session=sess, feed_dict={model.x_placeholder:image_input})
+    featuremaps = activation.shape[3]
+    plt.figure(plt_num, figsize=(15, 15))
+    for featuremap in range(featuremaps):
+        plt.subplot(6,8, featuremap+1) # sets the number of feature maps to show on each row and column
+        plt.title('FeatureMap ' + str(featuremap)) # displays the feature map number
+        if activation_min != -1 & activation_max != -1:
+            plt.imshow(activation[0,:,:, featuremap], interpolation="nearest", vmin =activation_min, vmax=activation_max, cmap="gray")
+        elif activation_max != -1:
+            plt.imshow(activation[0,:,:, featuremap], interpolation="nearest", vmax=activation_max, cmap="gray")
+        elif activation_min !=-1:
+            plt.imshow(activation[0,:,:, featuremap], interpolation="nearest", vmin=activation_min, cmap="gray")
+        else:
+            plt.imshow(activation[0,:,:, featuremap], interpolation="nearest", cmap="gray")
+
 
 with tf.Session(graph=model.graph) as sess:
     sess.run(tf.global_variables_initializer())
