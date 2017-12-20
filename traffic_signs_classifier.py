@@ -59,7 +59,7 @@ num_epoch = 20
 batch_size = 128
 save_dir = 'model_save_dir'
 num_step = int(np.round(data.n_train/batch_size))
-is_training = True
+is_training = False
 
 if not os.path.exists(save_dir):
     os.mkdir(save_dir)

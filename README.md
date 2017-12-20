@@ -123,8 +123,8 @@ My final model consisted of the following layers:
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* validation set accuracy of 96.82%
-* test set accuracy of 95.06%
+* validation set accuracy of 97.07%
+* test set accuracy of 95.03%
 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
@@ -165,11 +165,13 @@ If a well known architecture was chosen:
 
 #### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-Here are five German traffic signs that I found on the web:
+Here are 10 German traffic signs that I found on the web:
 
 ![](writeup_imgs/4.png)
 
-The third image might be difficult to classify because it is a little bit
+* The 5th image is difficult to recognize as the size is too small.
+* In 8th image, the "arret" is the stop sign in french, which is not in the training set, so it is hard for the model to recognize it.
+* The 10th image might be hard for the model to recognize since the sign is occluded by snow
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -177,46 +179,63 @@ Here are the results of the prediction:
 
 | Image			        |     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
+| Keep right      		| Keep right   									|
 | Road work      		| Road work   									|
+| Yield   | Yield  |
 | Speed limit (30km/h)     			| Speed limit (30km/h) 										|
+| Turn right ahead   | Roundabout mandatory  |
 | Slippery road					| Slippery road											|
 | No entry      		| No entry					 				|
-| Stop			| Stop      							|
-| Children crossing   | Children crossing  |
+| Turn left ahead			| Stop      							|
+| Right-of-way at the next intersection   | Children crossing  |
+| Go straight or right   | Speed limit (60km/h)  |
 
+The model work fine when the sign is clear. But when the sign is not in the train dataset, is still hard to identify the sign precisily.
 
-The prediction accuracy is 100%
+The prediction accuracy is 60%
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
 The top 5 is calculate in the model:
 
 ```
-[[  5.19338906e-01   3.33342195e-01   8.76728818e-02   4.26202156e-02
-    9.82177630e-03]
- [  1.00000000e+00   8.05549724e-12   1.26960176e-14   4.28726212e-19
-    2.54032207e-19]
- [  9.99999642e-01   1.92172621e-07   1.20765847e-07   6.99321767e-10
-    1.49360888e-11]
- [  1.00000000e+00   2.52387781e-15   8.35129289e-17   1.24814110e-18
-    1.33952782e-21]
- [  1.00000000e+00   1.15747916e-14   2.15361324e-15   2.09107321e-17
-    5.87508132e-18]
- [  9.78278279e-01   1.32782431e-02   8.40641744e-03   2.07224057e-05
-    1.62269826e-05]]
-[[25 27 20 18 24]
- [ 1  0  2  3  4]
- [23 31 19 29 22]
- [17 14 34 38 12]
- [14 38 17 34  8]
- [28 30 29 24 11]]
+[[  1.00000000e+00   1.06447605e-19   4.05146957e-20   4.74103778e-21
+    1.87866530e-23]
+ [  1.00000000e+00   7.37162864e-15   1.63145493e-21   6.15492629e-23
+    5.56724132e-23]
+ [  1.00000000e+00   4.69189401e-32   8.88218357e-38   0.00000000e+00
+    0.00000000e+00]
+ [  1.00000000e+00   1.64398304e-11   2.35198119e-13   4.66793957e-23
+    3.07634107e-23]
+ [  3.83373827e-01   1.56300962e-01   1.11141562e-01   8.24019611e-02
+    6.80121854e-02]
+ [  1.00000000e+00   4.58765070e-09   1.50478519e-10   3.26221689e-12
+    1.66451293e-12]
+ [  1.00000000e+00   1.31442593e-10   5.46305645e-17   2.76542291e-21
+    2.44920667e-21]
+ [  7.62751281e-01   8.67487341e-02   6.40631244e-02   3.11125182e-02
+    2.25958340e-02]
+ [  9.86572623e-01   1.06138643e-02   2.18002498e-03   2.88457784e-04
+    2.83240195e-04]
+ [  9.53132510e-01   1.69339385e-02   6.44845702e-03   6.18995447e-03
+    5.28505724e-03]]
+[[38 13  5  2 34]
+ [25 22 20 29 13]
+ [13 15 12  0  1]
+ [ 1  2  0  5  4]
+ [33 36 18 14  1]
+ [23 29 31 20 19]
+ [17 14 33 34  9]
+ [34 14 36 35 25]
+ [11 27 30 23 28]
+ [36 18 20 25 35]]
  ```
 
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
 
-The feature maps of the model is (for the second test image):
+The feature maps of the model is (for the first test image):
 
 ### After the first convolution map:
 
